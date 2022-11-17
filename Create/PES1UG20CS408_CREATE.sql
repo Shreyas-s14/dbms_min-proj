@@ -4,7 +4,7 @@ CREATE database mini_proj_408;
 CREATE TABLE LEAGUE_408(
 league_id INT NOT NULL,
 league_name VARCHAR(20) NOT NULL,
-league_level INT NOT NULL,
+--league_level INT NOT NULL,
 No_players INT NOT NULL,
 lvl_req INT NOT NULL,
 PRIMARY KEY(league_id)
@@ -46,11 +46,29 @@ CREATE TABLE SKILLS_408(
 -- Progress Entity
 CREATE TABLE PROGRESS_408(
     player_id INT NOT NULL,
-    session_id INT NOT NULL,
+    --session_id INT NOT NULL,
     trophies INT NOT NULL,
     exp INT ,    
-    FOREIGN KEY(player_id) REFERENCES PLAYER_408(player_id),
-    
+    FOREIGN KEY(player_id) REFERENCES PLAYER_408(player_id)
 );
+
+
+
+-- test:
+CREATE TABLE attack_408(
+    player_id INT NOT NULL,
+    session_id INT NOT NULL,
+    player2_id INT NOT NULL,
+    XP INT NOT NULL,
+    FOREIGN KEY(player_id) REFERENCES PLAYER_408(player_id),
+
+    FOREIGN KEY(session_id) REFERENCES GAME_SESSION_408(session_id),
+    FOREIGN KEY(player2_id) REFERENCES PLAYER_408(player_id)
+
+);
+
+
+
+
 
 
