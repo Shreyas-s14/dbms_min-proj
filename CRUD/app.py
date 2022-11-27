@@ -24,13 +24,13 @@ def main():
     choice = st.sidebar.selectbox("Menu", menu)
     if choice == "Create":
         st.subheader("Create")
-        create(c, mydb)
+        create()
     elif choice == "Read":
-        read(c, mydb)
+        read()
     elif choice == "Update":
-        update(c, mydb)
+        update()
     elif choice == "Delete":
-        delete(c, mydb)
+        delete()
     else:
         st.subheader("Thank you:")
 
