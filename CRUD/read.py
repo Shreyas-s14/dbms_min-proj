@@ -1,18 +1,17 @@
 import streamlit as st
 import mysql.connector
-from database import view_all_players, view_one_player
-import plotly.express as px
+from database import view_all_players,get_clan_info,get_league_info
 import pandas as pd
 
 def read():
     st.subheader("Read")
-    st.write("View all players")
-    result = view_all_players()
-    df=pd.DataFrame(result,columns=['player_id','username','clan_id','league_id','session_id'])
-    # st.write(result)
-    # st.write("View one player")
-    # player_id = st.number_input("Enter player_id")
-    # result = view_one_player(player_id)
-    # st.write(result)
     with st.expander("View all players"):
-        st.dataframe
+        df=pd.DataFrame(view_all_players(),columns=['Username','League','Level','Trophies','Experience','Coins','Server Region'])
+        df['Server Region'] = df['Server Region'].apply(lambda x: x.title())
+        st.dataframe(df)
+    with st.expander("Clan Information"):
+        df=pd.DataFrame(get_clan_info(),columns=['Clan ID','Number of members','Level Requirement','Average Trophies','Average Experience','Average Level','Total Coins'])
+        st.dataframe(df)
+    with st.expander("League Information"):
+        df=pd.DataFrame(get_league_info(),columns=['League', 'Number of Players', 'Level Requirement'])
+        st.dataframe(df)

@@ -1,38 +1,38 @@
-#importing all the required libraries
 import streamlit as st
-import plotly.express as px
-import mysql.connector
-#user defined: make py files for each
-from create import create
+import pandas as pd
+from create import create_player,create_clan
 from read import read
-from update import update
-from delete import delete
+from update import update_player,update_clan
+from delete import delete_player,delete_clan
+from database import general_query
 
-#connecting to the database
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="mini_proj_408"
-)
-c=mydb.cursor()
-
-#main:
 def main():
-    st.title("Mini Project")
-    menu = ["Create", "Read", "Update", "Delete"]
+    st.title("Game Database")
+    menu = ["Add Player", "Add Clan","Read", "Update Player", "Update Clan", "Delete Player","Delete Clan","CLI"]
     choice = st.sidebar.selectbox("Menu", menu)
-    if choice == "Create":
-        st.subheader("Create")
-        create()
+    if choice == "Add Player":
+        st.subheader("Add Player")
+        create_player()
+    elif choice == "Add Clan":
+        st.subheader("Add Clan")
+        create_clan()
     elif choice == "Read":
         read()
-    elif choice == "Update":
-        update()
-    elif choice == "Delete":
-        delete()
+    elif choice == "Update Player":
+        update_player()
+    elif choice == "Update Clan":
+        update_clan()
+    elif choice == "Delete Player":
+        delete_player()
+    elif choice == "Delete Clan":
+        delete_clan()
+    elif choice == "CLI":
+        q = st.text_input("Query Input")
+        if st.button("Execute"):
+            res = general_query(q)
+            st.dataframe(res)
     else:
-        st.subheader("Thank you:")
+        st.subheader("ERROR")
 
 if __name__=='__main__':
-    main()            
+    main()
