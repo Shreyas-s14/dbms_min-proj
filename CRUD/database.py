@@ -37,7 +37,7 @@ def add_clan(clan_id, lvl_req):
 #READ---------------------------------------------------------------------------
 def view_all_players():
     c.execute("""
-SELECT player_408.username, league_408.league_name, skills_408.level, progress_408.trophies, progress_408.exp, skills_408.coins, game_session_408.server_region FROM player_408
+SELECT player_408.player_id,player_408.username, league_408.league_name, skills_408.level, progress_408.trophies, progress_408.exp, skills_408.coins, game_session_408.server_region FROM player_408
 INNER JOIN progress_408 ON progress_408.player_id = player_408.player_id
 INNER JOIN skills_408 ON skills_408.player_id = player_408.player_id
 INNER JOIN game_session_408 ON game_session_408.session_id = player_408.session_id

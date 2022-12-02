@@ -7,7 +7,9 @@ def create_player():
     col1,col2=st.columns(2)
     with col1:
         username=st.text_input("Username")
-        clan_name=st.text_input("Clan Name")
+        #player_id=st.number_input("Player ID", min_value = 0, format = "%d")
+        #clan_name=st.text_input("Clan Name")
+        clan_id=st.number_input("Clan ID", min_value = 0, format = "%d")
         region=st.text_input("Region")
     with col2:
         level = st.number_input("Level", value = 8, min_value = 0)
@@ -16,12 +18,12 @@ def create_player():
         coins = st.number_input("Coins", min_value = 0)
 
     player_id = cname_hash(username)
-    clan_id = cname_hash(clan_name)
+    #clan_id = cname_hash(clan_name)
     if st.button("Add"):
         if username == "":
             st.error("Name cannot be empty")
-        elif clan_name == "":
-            st.error("Clan name cannot be empty")
+        elif clan_id == 0:
+            st.error("Clan id cannot be 0")
         elif region == "":
             st.error("Region cannot be empty")
         else:
@@ -53,7 +55,9 @@ def create_clan():
             try:
                 add_clan(clan_id, level)
             except mysql.connector.Error as err:
+                print(err)
                 if err.errno == 1062:
+                    print(err)
                     st.error("Clan already exists")
                 if err.errno == 1644:
                     st.error(err)

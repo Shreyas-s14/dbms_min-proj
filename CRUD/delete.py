@@ -4,26 +4,28 @@ from database import remove_player, remove_clan
 from func import cname_hash
 
 def delete_player():
-    username=st.text_input("Username")
+    # username=st.text_input("Username")
+    player_id=st.number_input("Player ID")
     if st.button("Delete"):
-        if username == "":
-            st.error("Name cannot be empty")
+        if player_id == 0:
+            st.error("ID cannot be empty")
         else:
             try:
-                remove_player(cname_hash(username))
+                remove_player(player_id)
             except ValueError:
                 st.error("Player does not exist")
             else:
                 st.success("Player removed")
 
 def delete_clan():
-    clan_name=st.text_input("Clan Name")
+    #clan_name=st.text_input("Clan Name")
+    clan_id=st.number_input("Clan ID")
     if st.button("Delete"):
-        if clan_name == "":
-            st.error("Name cannot be empty")
+        if clan_id == 0:
+            st.error("ID cannot be empty")
         else:
             try:
-                remove_clan(cname_hash(clan_name))
+                remove_clan(clan_id)
             except mysql.connector.Error as err:
                 if err.errno == 1451:
                     st.error("Clan still has members")

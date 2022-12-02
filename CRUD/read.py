@@ -6,7 +6,7 @@ import pandas as pd
 def read():
     st.subheader("Read")
     with st.expander("View all players"):
-        df=pd.DataFrame(view_all_players(),columns=['Username','League','Level','Trophies','Experience','Coins','Server Region'])
+        df=pd.DataFrame(view_all_players(),columns=['Player_id','Username','League','Level','Trophies','Experience','Coins','Server Region'])
         df['Server Region'] = df['Server Region'].apply(lambda x: x.title())
         st.dataframe(df)
     with st.expander("Clan Information"):

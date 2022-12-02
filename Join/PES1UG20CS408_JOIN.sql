@@ -52,7 +52,9 @@ RIGHT OUTER JOIN CLAN_408
 ON PLAYER_408.clan_id = CLAN_408.clan_id;
 
 
---WRITE ONE MORE JOIN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
 
 
 

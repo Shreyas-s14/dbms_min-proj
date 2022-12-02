@@ -1,0 +1,11 @@
+
+DROP FUNCTION IF EXISTS PES1UG20CS408_FUNC;
+DELIMITER $$
+CREATE FUNCTION PES1UG20CS408_FUNC(clan_id INT)
+RETURNS INT
+BEGIN
+DECLARE total_coins INT;
+SELECT SUM(coins) INTO total_coins FROM skills_408 WHERE skills_408.player_id IN (SELECT player_408.player_id FROM player_408 WHERE player_408.clan_id = clan_id);
+RETURN total_coins;
+END$$
+DELIMITER ;

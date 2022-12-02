@@ -1,0 +1,307 @@
+-- CREATION
+-- Creating the database:
+CREATE database mini_proj_408;
+-- Creating the tables:
+CREATE TABLE LEAGUE_408(
+league_id INT NOT NULL,
+league_name VARCHAR(20) NOT NULL,
+--league_level INT NOT NULL,
+No_players INT NOT NULL,
+lvl_req INT NOT NULL,
+PRIMARY KEY(league_id)
+);
+CREATE TABLE GAME_SESSION_408(
+session_id INT NOT NULL,
+start_time TIME NOT NULL,
+No_players INT NOT NULL,
+server_region VARCHAR(20) NOT NULL,
+PRIMARY KEY(session_id)
+);
+
+CREATE TABLE CLAN_408(
+clan_id INT NOT NULL,
+no_members INT NOT NULL,
+lvl_req INT NOT NULL,
+PRIMARY KEY(clan_id)
+);
+--PLAYER ENTITY
+CREATE TABLE PLAYER_408(
+player_id INT NOT NULL,
+username VARCHAR(20) NOT NULL,
+clan_id INT NOT NULL,
+league_id INT NOT NULL,
+session_id INT NOT NULL,
+PRIMARY KEY(player_id),
+FOREIGN KEY(clan_id) REFERENCES CLAN_408(clan_id),
+FOREIGN KEY(league_id) REFERENCES LEAGUE_408(league_id),
+FOREIGN KEY(session_id) REFERENCES GAME_SESSION_408(session_id)
+);
+
+--SKILLS ENTITY
+CREATE TABLE SKILLS_408(
+    player_id INT NOT NULL,
+    level INT NOT NULL,
+    coins INT NOT NULL,
+    FOREIGN KEY(player_id) REFERENCES PLAYER_408(player_id)
+);
+-- Progress Entity
+CREATE TABLE PROGRESS_408(
+    player_id INT NOT NULL,
+    --session_id INT NOT NULL,
+    trophies INT NOT NULL,
+    exp INT ,    
+    FOREIGN KEY(player_id) REFERENCES PLAYER_408(player_id)
+);
+
+
+
+-- test:
+CREATE TABLE attack_408(
+    player_id INT NOT NULL,
+    session_id INT NOT NULL,
+    player2_id INT NOT NULL,
+    XP INT NOT NULL,
+    FOREIGN KEY(player_id) REFERENCES PLAYER_408(player_id),
+
+    FOREIGN KEY(session_id) REFERENCES GAME_SESSION_408(session_id),
+    FOREIGN KEY(player2_id) REFERENCES PLAYER_408(player_id)
+
+);
+
+-- INSERTION
+-- Insert random values into the table
+-- clan
+INSERT INTO `clan_408` VALUES ('23450', '24', '3');
+INSERT INTO `clan_408` VALUES ('23451', '16', '15');
+INSERT INTO `clan_408` VALUES ('23452', '34', '8');
+INSERT INTO `clan_408` VALUES ('23453', '23', '3');
+INSERT INTO `clan_408` VALUES ('23454', '9', '12');
+INSERT INTO `clan_408` VALUES ('23455', '9', '6');
+INSERT INTO `clan_408` VALUES ('23456', '15', '14');
+INSERT INTO `clan_408` VALUES ('23457', '2', '16');
+INSERT INTO `clan_408` VALUES ('23458', '8', '10');
+
+
+--game session
+INSERT INTO `game_session_408` VALUES ('10', '18:00:00', '10', 'India');
+INSERT INTO `game_session_408` VALUES ('11', '17:00:00', '9', 'Europe');
+INSERT INTO `game_session_408` VALUES ('12', '19:00:00', '12', 'Singapore');
+INSERT INTO `game_session_408` VALUES ('13', '19:00:00', '8', 'India');
+INSERT INTO `game_session_408` VALUES ('14', '23:00:00', '6', 'Europe');
+INSERT INTO `game_session_408` VALUES ('15', '20:00:00', '5', 'Singapore');
+
+-- player
+INSERT INTO `player_408` VALUES ('69', 'noob', '23450', '12300', '12');
+INSERT INTO `player_408` VALUES ('70', 'maniac', '23456', '12306', '10');
+INSERT INTO `player_408` VALUES ('71', 'jesse', '23454', '12305', '10');
+INSERT INTO `player_408` VALUES ('72', 'hog_rider', '23458', '12304', '13');
+INSERT INTO `player_408` VALUES ('73', 'waltuh', '23456', '12306', '11');
+INSERT INTO `player_408` VALUES ('74', 'pekka', '23453', '12300', '12');
+INSERT INTO `player_408` VALUES ('75', 'kkk', '23457', '12307', '11');
+INSERT INTO `player_408` VALUES ('75', 'kkk', '23457', '12307', '11');
+
+-- skills
+INSERT INTO `skills_408` VALUES ('69', '3', '12000');
+INSERT INTO `skills_408` VALUES ('70', '14', '1000000');
+INSERT INTO `skills_408` VALUES ('71', '12', '500000');
+INSERT INTO `skills_408` VALUES ('72', '10', '320000');
+INSERT INTO `skills_408` VALUES ('73', '14', '4000000');
+INSERT INTO `skills_408` VALUES ('74', '3', '9000');
+INSERT INTO `skills_408` VALUES ('75', '16', '10000000');
+
+-- progress
+INSERT INTO `progress_408` VALUES ('69', '16', '40');
+INSERT INTO `progress_408` VALUES ('70', '599', '79');
+INSERT INTO `progress_408` VALUES ('71', '400', '45');
+INSERT INTO `progress_408` VALUES ('72', '345', '55');
+INSERT INTO `progress_408` VALUES ('73', '660', '21');
+INSERT INTO `progress_408` VALUES ('74', '2', '');
+INSERT INTO `progress_408` VALUES ('75', '800', '');
+
+-- JOIN
+-- CREATE VIEW PLAYER_SKILLS_408 AS
+-- SELECT PLAYER_408.player_id, PLAYER_408.username, SKILLS_408.level, SKILLS_408.coins
+-- FROM PLAYER_408
+-- INNER JOIN SKILLS_408
+-- ON PLAYER_408.player_id = SKILLS_408.player_id;
+
+CREATE VIEW PLAYER_PROGRESS_408 AS
+SELECT PLAYER_408.player_id, PLAYER_408.username, PROGRESS_408.trophies, PROGRESS_408.exp
+FROM PLAYER_408
+INNER JOIN PROGRESS_408
+ON PLAYER_408.player_id = PROGRESS_408.player_id;
+
+-- JOIN ON PLAYER, SKILL AND PROGRESS
+CREATE VIEW PLAYER_SKILLS_PROGRESS_408 AS
+SELECT PLAYER_408.player_id, PLAYER_408.username, SKILLS_408.level, SKILLS_408.coins, PROGRESS_408.trophies, PROGRESS_408.exp
+FROM PLAYER_408
+INNER JOIN SKILLS_408
+ON PLAYER_408.player_id = SKILLS_408.player_id
+INNER JOIN PROGRESS_408
+ON PLAYER_408.player_id = PROGRESS_408.player_id;
+
+-- JOIN ON CLAN AND LEAGUE
+CREATE VIEW CLAN_LEAGUE_408 AS
+SELECT CLAN_408.clan_id, CLAN_408.no_members, CLAN_408.lvl_req, LEAGUE_408.league_id, LEAGUE_408.No_players, LEAGUE_408.lvl_req
+FROM CLAN_408
+INNER JOIN LEAGUE_408
+ON CLAN_408.lvl_req = LEAGUE_408.lvl_req;
+
+-- join outer
+CREATE VIEW PLAYER_SKILLS_PROGRESS_OUTER_408 AS
+SELECT PLAYER_408.player_id, PLAYER_408.username, SKILLS_408.level, SKILLS_408.coins, PROGRESS_408.trophies, PROGRESS_408.exp
+FROM PLAYER_408
+LEFT OUTER JOIN SKILLS_408
+ON PLAYER_408.player_id = SKILLS_408.player_id
+LEFT OUTER JOIN PROGRESS_408
+ON PLAYER_408.player_id = PROGRESS_408.player_id;
+
+-- LEFT OUTER JOIN ON GAME SESSION AND PLAYER
+CREATE VIEW GAME_SESSION_PLAYER_408 AS
+SELECT GAME_SESSION_408.session_id, GAME_SESSION_408.server_region, PLAYER_408.player_id, PLAYER_408.username
+FROM GAME_SESSION_408
+LEFT OUTER JOIN PLAYER_408
+ON GAME_SESSION_408.session_id = PLAYER_408.session_id;
+
+-- RIGHT OUTER JOIN ON GAME SESSION AND (CLAN RIGHT OUTER JOIN PLAYER)
+CREATE VIEW GAME_SESSION_PLAYER_CLAN_408 AS
+SELECT GAME_SESSION_408.session_id, GAME_SESSION_408.server_region, PLAYER_408.player_id, PLAYER_408.username, CLAN_408.clan_id, CLAN_408.no_members, CLAN_408.lvl_req
+FROM GAME_SESSION_408
+RIGHT OUTER JOIN PLAYER_408
+ON GAME_SESSION_408.session_id = PLAYER_408.session_id
+RIGHT OUTER JOIN CLAN_408
+ON PLAYER_408.clan_id = CLAN_408.clan_id;
+
+
+-- aggregate functions
+-- GET AVG NO OF TROPHIES FOR EACH PLAYER BELONGING TO A CLAN
+select avg(trophies) from PROGRESS_408 where player_id in (select player_id from PLAYER_408 where clan_id = 23456);
+
+-- get count of players in a clan
+select count(player_id) from PLAYER_408 where clan_id = 23458;
+
+-- sum of all trophies in a clan
+select sum(trophies) from PROGRESS_408 where player_id in (select player_id from PLAYER_408 where clan_id = 23458);
+
+-- max coins in a view of league and clan
+select max(coins) from SKILLS_408 where player_id in (select player_id from PLAYER_408 where clan_id in (select clan_id from CLAN_408 where lvl_req = 10));
+
+--set operators
+-- Set operations: DO LATER
+
+--1) Union of people based in India and Europe
+(Select player_408.username,game_session_408.server_region
+FROM player_408
+INNER JOIN game_session_408
+ON player_408.session_id = game_session_408.session_id
+WHERE game_session_408.server_region = 'India')
+UNION
+(Select player_408.username,game_session_408.server_region
+FROM player_408
+INNER JOIN game_session_408
+ON player_408.session_id = game_session_408.session_id
+WHERE game_session_408.server_region = 'Europe');
+
+--2) List of players not in a particular clan
+Select player_408.username, clan_408.clan_id FROM player_408,clan_408
+WHERE player_408.clan_id = clan_408.clan_id
+EXCEPT
+Select player_408.username, clan_408.clan_id FROM player_408,clan_408
+WHERE player_408.clan_id = clan_408.clan_id AND clan_408.clan_id = 242747;
+
+--3)
+SELECT SKILLS_408.coins , skills_408.level, player_408.username FROM skills_408 
+INNER JOIN player_408 ON skills_408.player_id = player_408.player_id
+intersect
+SELECT SKILLS_408.coins , skills_408.level, player_408.username FROM skills_408
+INNER JOIN player_408 ON skills_408.player_id = player_408.player_id
+WHERE skills_408.level = 10;
+
+--4) UNION ALL:
+SELECT player_408.username, player_408.player_id FROM player_408
+UNION ALL
+SELECT player_408.username, player_408.player_id FROM player_408
+WHERE player_408.player_id = 70;
+
+--functions
+
+DROP FUNCTION IF EXISTS PES1UG20CS408_FUNC;
+DELIMITER $$
+CREATE FUNCTION PES1UG20CS408_FUNC(clan_id INT)
+RETURNS INT
+BEGIN
+DECLARE total_coins INT;
+SELECT SUM(coins) INTO total_coins FROM skills_408 WHERE skills_408.player_id IN (SELECT player_408.player_id FROM player_408 WHERE player_408.clan_id = clan_id);
+RETURN total_coins;
+END$$
+DELIMITER ;
+
+--procedure
+-- Create a function to get player with equivalent level and league but not same clan
+DROP PROCEDURE IF EXISTS players_below_trophy;
+DELIMITER $$
+
+CREATE PROCEDURE players_below_trophy(IN trophymax INT)
+BEGIN
+SELECT player_408.player_id,player_408.username, progress_408.trophies FROM player_408 JOIN 
+progress_408 ON player_408.player_id=progress_408.player_id WHERE progress_408.trophies<=400 
+ORDER BY progress_408.trophies DESC;
+END $$
+DELIMITER ;
+
+
+-- cursor
+--
+DROP PROCEDURE IF EXISTS update_trophies;
+DELIMITER $$
+CREATE PROCEDURE update_trophies(IN uname VARCHAR(20), IN new_trophies INT)
+BEGIN
+    DECLARE cont INT default 0;
+    DECLARE pid INT;
+    DECLARE C1 CURSOR FOR SELECT player_408.player_id FROM player_408 WHERE player_408.username=uname;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET cont = 1;
+    -- SELECT player_408.player_id FROM player_408;
+
+    OPEN C1;
+    l1: LOOP
+        FETCH C1 INTO pid;
+        if cont=1 THEN
+            leave l1;
+        end if;
+        -- select C1;
+        select pid;
+        UPDATE progress_408 SET trophies=new_trophies WHERE player_id = pid;
+    END LOOP l1;
+    CLOSE C1;
+END $$
+DELIMITER ;
+
+call update_trophies('jesse', 999);
+
+-- trigger
+drop trigger if exists player_408_lvl_req_check_update;
+delimiter //
+create trigger player_408_lvl_req_check_update
+before update on PLAYER_408
+for each row
+begin
+if ( (select lvl_req from CLAN_408 where clan_id = new.clan_id) > (select level from SKILLS_408 where player_id = new.player_id) ) then
+    signal sqlstate '45000' set message_text = 'Player level is not high enough to join clan';
+end if;
+if ( (select lvl_req from LEAGUE_408 where league_id = new.league_id) > (select level from SKILLS_408 where player_id = new.player_id) ) then
+    signal sqlstate '45000' set message_text = 'Player level is not high enough to join league';
+end if;
+end//
+delimiter ;
+
+
+
+
+
+
+
+
+
+
+
